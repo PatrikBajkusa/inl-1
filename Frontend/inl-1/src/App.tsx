@@ -18,7 +18,7 @@ function App() {
   const handleClick = () => {
     const search = async() => {
       const response = await axios(
-        `https://www.googleapis.com/customsearch/v1?key=AIzaSyAS9NiW_c-CsQ1t1qc7q8kieuwT9TV8zuY&cx=05d1c58acdbb94299&num=10&searchType=image&q=${userInputValue}`
+        `https://www.googleapis.com/customsearch/v1?key=&cx=05d1c58acdbb94299&num=10&searchType=image&q=${userInputValue}`
       );
       console.log(response.data.items);
       setItems(response.data.items);
