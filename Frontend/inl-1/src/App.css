@@ -44,3 +44,21 @@ a:hover {
   padding-right: 150px;
   display: flex;
 }
+ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+li {
+  display: flex;
+  align-items: start;
+  padding: 30px;
+  list-style: none;
+  border: 1px solid whitesmoke;
+  margin: 30px;
+}
+.atagg:hover {
+  border: 2px solid blue;
+}
+.atagg:active {
+  background-color: black;
+}

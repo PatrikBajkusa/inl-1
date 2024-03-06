@@ -10,21 +10,21 @@ import Profile from "./components/Profile";
 
 function App() {
   const [userInputValue, setUserInputValue] = useState("");
+  const [items, setItems] = useState();
   const { isAuthenticated } = useAuth0();
   const [showSaved, setShowSaved] = useState(false);
-  useEffect(() => {
-    const search = async () => {
+  useEffect(() => {}, []);
+
+  const handleClick = () => {
+    const search = async() => {
       const response = await axios(
-        `https://www.googleapis.com/customsearch/v1?key=${
-          import.meta.env.VITE_GOOGLE_API_KEY
-        }&cx=05d1c58acdbb94299&num=10&searchType=image&q=snus`
+        `https://www.googleapis.com/customsearch/v1?key=AIzaSyAS9NiW_c-CsQ1t1qc7q8kieuwT9TV8zuY&cx=05d1c58acdbb94299&num=10&searchType=image&q=${userInputValue}`
       );
-      console.log(response.data);
+      console.log(response.data.items);
+      setItems(response.data.items);
     };
     search();
-  }, []);
-
-  const handleClick = () => {};
+  };
   const home = () => {
     setShowSaved(false);
   };
@@ -64,6 +64,19 @@ function App() {
               <button onClick={handleClick}>Search</button>
             </form>
           )}
+
+          <ul>
+            {items?.map((pic, i) => {
+              return (
+                <a className="atagg" >
+                  <li key={i}>
+                    <img src={pic.image.thumbnailLink} />
+                  </li>
+                </a>
+              );
+            })}
+          </ul>
+          <button>Spara bild</button>
         </main>
       )}
       {showSaved && <div>Hello world</div>}
