@@ -66,7 +66,7 @@ function App() {
           )}
 
           <ul>
-            {items?.map((pic, i) => {
+            {items.map((pic, i) => {
               return (
                 <a className="atagg" >
                   <li key={i}>
