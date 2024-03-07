@@ -2,27 +2,43 @@ import "./App.css";
 import LogOutBtn from "./components/LogOutBtn";
 import LogInBtn from "./components/LogInBtn";
 
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ShowSavedPics } from "./components/ShowSavedPics";
 import Profile from "./components/Profile";
+import { IPicture } from "./models/IPicture";
 
 function App() {
   const [userInputValue, setUserInputValue] = useState("");
-  const [items, setItems] = useState();
+  const [items, setItems] = useState<IPicture[]>([]);
   const { isAuthenticated } = useAuth0();
   const [showSaved, setShowSaved] = useState(false);
-  useEffect(() => {}, []);
+  const [formattedTime, setFormattedTime] = useState();
+  const [showSearchTime, setShowSearchTime] = useState(false);
+  const [spelling, setSpelling] = useState("");
+  const [showspelling, setShowSpelling] = useState(false);
+
+  const handleClickCorrectedSpelling = () => {
+    setUserInputValue(spelling);
+  };
 
   const handleClick = () => {
-    const search = async() => {
+    const search = async () => {
       const response = await axios(
-        `https://www.googleapis.com/customsearch/v1?key=&cx=05d1c58acdbb94299&num=10&searchType=image&q=${userInputValue}`
+        `https://www.googleapis.com/customsearch/v1?key=AIzaSyAS9NiW_c-CsQ1t1qc7q8kieuwT9TV8zuY&cx=05d1c58acdbb94299&num=10&searchType=image&q=${userInputValue}`
       );
-      console.log(response.data.items);
+
+      console.log(response.data);
       setItems(response.data.items);
+      setFormattedTime(response.data.searchInformation.searchTime);
+      setShowSearchTime(true);
+      response.data.spelling &&
+        setSpelling(response.data.spelling.correctedQuery);
+      setShowSpelling(true);
+      !response.data.spelling && setShowSpelling(false);
     };
+
     search();
   };
   const home = () => {
@@ -64,19 +80,27 @@ function App() {
               <button onClick={handleClick}>Search</button>
             </form>
           )}
+          {showSearchTime && (
+            <div>The search took: {formattedTime} seconds</div>
+          )}
+          {showspelling && (
+            <div>
+              Did you mean?:
+              <a onClick={handleClickCorrectedSpelling}> {spelling}</a>
+            </div>
+          )}
 
           <ul>
-            {items?.map((pic, i) => {
+            {items.map((pic, i) => {
               return (
-                <a className="atagg" >
-                  <li key={i}>
-                    <img src={pic.image.thumbnailLink} />
+                <a key={i} className="atagg">
+                  <li>
+                    <img src={pic.image.thumbnailLink} alt={`Thumbnail${i}`} />
                   </li>
                 </a>
               );
             })}
           </ul>
-          <button>Spara bild</button>
         </main>
       )}
       {showSaved && <div>Hello world</div>}
