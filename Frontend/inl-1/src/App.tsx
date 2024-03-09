@@ -5,7 +5,7 @@ import LogInBtn from "./components/LogInBtn";
 import { ChangeEvent, FormEvent, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-import { ShowSavedPics } from "./components/ShowSavedPics";
+
 import Profile from "./components/Profile";
 import { IPicture } from "./models/IPicture";
 
@@ -18,6 +18,7 @@ function App() {
   const [showSearchTime, setShowSearchTime] = useState(false);
   const [spelling, setSpelling] = useState("");
   const [showspelling, setShowSpelling] = useState(false);
+  const { user } = useAuth0();
 
   const handleClickCorrectedSpelling = () => {
     setUserInputValue(spelling);
@@ -43,6 +44,31 @@ function App() {
   };
   const home = () => {
     setShowSaved(false);
+    console.log(user?.sub);
+  };
+  const lookAtSavedImages = () => {
+    const showFavouritePics = async () => {
+      const response = await axios.get(
+        `http://localhost:3000/users/${user?.sub}`
+      );
+      console.log(response.data);
+    };
+    setShowSaved(true);
+    showFavouritePics();
+  };
+  const handlePost = (pic: any) => {
+    const sendImg = async () => {
+      const response = axios.post("http://localhost:3000/users/", {
+        userId: user?.sub,
+        favoritePics: {
+          title: pic.title,
+          byteSize: pic.image.byteSize,
+          imageUrl: pic.image.thumbnailLink,
+        },
+      });
+      console.log(response);
+    };
+    sendImg();
   };
   return (
     <>
@@ -54,7 +80,9 @@ function App() {
             <a onClick={home}>
               <p>Home</p>
             </a>
-            <ShowSavedPics stateChanger={setShowSaved} />
+            <a onClick={lookAtSavedImages}>
+              <p>Saved Images</p>
+            </a>
             <LogOutBtn />
             <Profile />
           </div>
@@ -93,7 +121,7 @@ function App() {
           <ul>
             {items.map((pic, i) => {
               return (
-                <a key={i} className="atagg">
+                <a key={i} className="atagg" onClick={() => handlePost(pic)}>
                   <li>
                     <img src={pic.image.thumbnailLink} alt={`Thumbnail${i}`} />
                   </li>
