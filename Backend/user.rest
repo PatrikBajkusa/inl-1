@@ -1,0 +1,12 @@
+POST http://localhost:3000/users/Hello
+Content-Type: application/json
+
+{
+    "userId": "123",
+    "favoritePics": {
+        "title": "hello",
+        "byteSize": 12315,
+        "imageUrl": "hhshdgjsjdjhfdhfds"
+    }
+}
+

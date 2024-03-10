@@ -19,6 +19,7 @@ function App() {
   const [spelling, setSpelling] = useState("");
   const [showspelling, setShowSpelling] = useState(false);
   const { user } = useAuth0();
+  const [showSavedImages, setShowSavedImages] = useState();
 
   const handleClickCorrectedSpelling = () => {
     setUserInputValue(spelling);
@@ -58,14 +59,17 @@ function App() {
   };
   const handlePost = (pic: any) => {
     const sendImg = async () => {
-      const response = axios.post("http://localhost:3000/users/", {
-        userId: user?.sub,
-        favoritePics: {
-          title: pic.title,
-          byteSize: pic.image.byteSize,
-          imageUrl: pic.image.thumbnailLink,
-        },
-      });
+      const response = await axios.post(
+        `http://localhost:3000/users/${user?.sub}`,
+        {
+          userId: user?.sub,
+          favoritePics: {
+            title: pic.title,
+            byteSize: pic.image.byteSize,
+            imageUrl: pic.image.thumbnailLink,
+          },
+        }
+      );
       console.log(response);
     };
     sendImg();

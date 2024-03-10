@@ -1,4 +1,5 @@
 const express = require("express");
+
 const {
   getAllpictures,
   sendInPictures,
@@ -6,8 +7,7 @@ const {
 
 const router = express.Router();
 
-router.post("/", sendInPictures);
+router.post("/:id", sendInPictures);
 router.get("/:id", getAllpictures);
-
 
 module.exports = router;
