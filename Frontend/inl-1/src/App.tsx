@@ -8,6 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import Profile from "./components/Profile";
 import { IPicture } from "./models/IPicture";
+import { IShowImg } from "./models/IShowImg";
 
 function App() {
   const [userInputValue, setUserInputValue] = useState("");
@@ -19,7 +20,7 @@ function App() {
   const [spelling, setSpelling] = useState("");
   const [showspelling, setShowSpelling] = useState(false);
   const { user } = useAuth0();
-  const [showSavedImages, setShowSavedImages] = useState();
+  const [showSavedImages, setShowSavedImages] = useState<IShowImg[]>([]);
 
   const handleClickCorrectedSpelling = () => {
     setUserInputValue(spelling);
@@ -53,6 +54,7 @@ function App() {
         `http://localhost:3000/users/${user?.sub}`
       );
       console.log(response.data);
+      setShowSavedImages(response.data);
     };
     setShowSaved(true);
     showFavouritePics();
@@ -135,7 +137,17 @@ function App() {
           </ul>
         </main>
       )}
-      {showSaved && <div>Hello world</div>}
+      {showSaved && (
+        <ul>
+          {showSavedImages.map((pic, i) => {
+            return (
+              <li key={i}>
+                <img src={pic.favoritePics.imageUrl} />
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </>
   );
 }
