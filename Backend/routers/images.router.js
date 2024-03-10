@@ -1,6 +1,9 @@
 const express = require("express");
+const { userSchema } = require("../schemas/user.schema");
+const fs = require("fs");
 
 const router = express.Router();
+
 const users = [];
 
 router.get("/:id", (req, res) => {
@@ -8,7 +11,13 @@ router.get("/:id", (req, res) => {
   res.send(users.filter((user) => user.userId === userId));
 });
 router.post("/:id", (req, res) => {
+  const { error } = userSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json(error);
+  }
+
   users.push(req.body);
+
   res.status(201).json(users);
 });
 

@@ -4,7 +4,6 @@ const app = express();
 const imagesRouter = require("./routers/images.router");
 
 
-
 app.use(cors());
 //Middleware
 app.use(express.json());
