@@ -46,7 +46,6 @@ function App() {
   };
   const home = () => {
     setShowSaved(false);
-    console.log(user?.sub);
   };
   const lookAtSavedImages = () => {
     const showFavouritePics = async () => {
