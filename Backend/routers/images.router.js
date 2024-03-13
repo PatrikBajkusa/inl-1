@@ -24,7 +24,7 @@ router.post("/:id", (req, res) => {
   }
 
   users.push(req.body);
-  fs.writeFile("data.json", JSON.stringify(users) , (err) => {
+  fs.writeFile("data.json", JSON.stringify(users), (err) => {
     if (err) {
       console.error(err);
       res.status(500).send("Internal Server Error");
@@ -32,8 +32,6 @@ router.post("/:id", (req, res) => {
       res.status(201).json(users);
     }
   });
-
-  res.status(201).json(users);
 });
 
 module.exports = router;
